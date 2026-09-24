@@ -1,3 +1,7 @@
+[workspace]
+resolver = "2"
+members = ["."]
+
 [package]
 name = "tokio-verification"
 version = "0.0.0"
@@ -12,8 +16,5 @@ path = "src/bin/metaverify.rs"
 
 [dependencies]
 
-[package.metadata.kani.flags]
-default-unwind = "12"
-
-[lints]
-workspace = true
+[lints.rust]
+unsafe_code = "forbid"
