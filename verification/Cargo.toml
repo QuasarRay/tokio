@@ -1,0 +1,16 @@
+[package]
+name = "tokio-verification"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.71"
+publish = false
+license = "MIT"
+
+[[bin]]
+name = "tokio-metaverify"
+path = "src/bin/metaverify.rs"
+
+[dependencies]
+
+[lints]
+workspace = true
