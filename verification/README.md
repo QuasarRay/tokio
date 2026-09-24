@@ -76,3 +76,12 @@ registry and performs immutable proof-plan construction, functional
 transformation, aggregation, Writer-based diagnostic accumulation, pipeline
 composition, and lens-based metadata updates without entering Tokio's runtime
 dependency graph.
+
+
+## Representation-only and binary-identity gate
+
+The final stack layer requires every production Rust source change to map to a
+Kani regression harness, then compares original and verification release
+artifacts byte-for-byte on Linux, macOS, and Windows for minimal and full Tokio
+builds. The current stack changes no production Rust source, so the
+representation map is intentionally empty.

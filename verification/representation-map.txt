@@ -1,0 +1,3 @@
+# production-source|kani-harness|reason
+# Add an entry only when a production source file is representation-refactored.
+# The mapped Kani harness must pass before the byte-identity build comparison.
