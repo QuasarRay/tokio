@@ -1,0 +1,51 @@
+name: Formal verification
+
+on:
+  push:
+    branches: ["master", "tokio-*.x"]
+    paths:
+      - "verification/**"
+      - "tokio/src/runtime/**"
+      - "tokio/src/sync/**"
+      - "tokio/src/util/**"
+      - ".github/workflows/formal-verification.yml"
+  pull_request:
+    branches: ["master", "tokio-*.x"]
+    paths:
+      - "verification/**"
+      - "tokio/src/runtime/**"
+      - "tokio/src/sync/**"
+      - "tokio/src/util/**"
+      - ".github/workflows/formal-verification.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  metaverification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Test verification infrastructure
+        run: cargo test -p tokio-verification
+      - name: Validate proof registry and source anchors
+        run: cargo run -p tokio-verification --bin tokio-metaverify -- check .
+
+  kani:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify Kani obligations
+        uses: model-checking/kani-github-action@v1
+        with:
+          working-directory: .
+          args: '-p tokio-verification'
