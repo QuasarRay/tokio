@@ -6,7 +6,6 @@ members = [
   "tokio-test",
   "tokio-stream",
   "tokio-util",
-  "verification",
 
   # Internal
   "benches",
@@ -29,7 +28,6 @@ config = "spellcheck.toml"
 [workspace.lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = [
   'cfg(fuzzing)',
-  'cfg(kani)',
   'cfg(loom)',
   'cfg(mio_unsupported_force_poll_poll)',
   'cfg(tokio_allow_from_blocking_fd)',
