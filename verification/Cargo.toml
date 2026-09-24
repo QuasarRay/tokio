@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["."]
+members = [".", "macros"]
 
 [package]
 name = "tokio-verification"
@@ -19,6 +19,11 @@ name = "tokio-proof-patterns"
 path = "src/bin/proof_patterns.rs"
 
 [dependencies]
+tokio-verification-macros = { path = "macros" }
+
+[package.metadata.kani.flags]
+default-unwind = "12"
 
 [lints.rust]
 unsafe_code = "forbid"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }

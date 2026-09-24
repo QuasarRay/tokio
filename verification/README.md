@@ -39,3 +39,30 @@ The regression format follows Kani's own `expected` testing principle: stable
 diagnostic fragments must remain present, while volatile match counts may grow.
 Every diagnosed implementation family is mapped to a reusable metaprogramming
 strategy before backend-specific proofs are introduced.
+
+
+## Generated Kani proof families
+
+This stack adds:
+
+- a procedural macro crate with `#[derive(ProofState)]` and
+  `#[proof_family(...)]`
+- declarative `kani_harness!` and `kani_sequence_proof!` generators
+- invariant delegation via `delegate_invariant!`
+- one-to-one mapping from diagnosed implementation patterns to proof-family
+  mechanisms
+- generated abstract models for intrusive lists, task-state transitions, and
+  RawWaker refcount conservation
+- Kani expected-output regressions under
+  `verification/regression/kani-harnesses.expected`
+
+Run:
+
+```sh
+cargo test --manifest-path verification/Cargo.toml
+cargo kani --manifest-path verification/Cargo.toml
+bash verification/scripts/run-kani-expected.sh
+```
+
+The generated model proofs are explicitly registered as abstract-model
+assurance; they do not claim equivalence to Tokio's unsafe implementation.
