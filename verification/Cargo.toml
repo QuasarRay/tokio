@@ -14,6 +14,10 @@ license = "MIT"
 name = "tokio-metaverify"
 path = "src/bin/metaverify.rs"
 
+[[bin]]
+name = "tokio-proof-patterns"
+path = "src/bin/proof_patterns.rs"
+
 [dependencies]
 
 [lints.rust]

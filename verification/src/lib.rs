@@ -5,6 +5,7 @@
 //! production dependency graph remain unchanged.
 
 pub mod registry;
+pub mod patterns;
 
 /// Define an abstract state model and generate invariant boilerplate once.
 ///

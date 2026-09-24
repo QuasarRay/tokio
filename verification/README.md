@@ -24,3 +24,18 @@ cargo run --manifest-path verification/Cargo.toml --bin tokio-metaverify -- chec
 Subsequent stacked PRs add source-pattern regression diagnostics, Kani proof
 families, Verus adapters, Lambars-powered metageneration, and binary-identity
 enforcement without modifying Tokio's production sources.
+
+
+## Pattern regression layer
+
+This stacked layer adds a repository-wide proof-pattern scanner:
+
+```sh
+cargo run --manifest-path verification/Cargo.toml --bin tokio-proof-patterns -- report .
+cargo run --manifest-path verification/Cargo.toml --bin tokio-proof-patterns -- regression .
+```
+
+The regression format follows Kani's own `expected` testing principle: stable
+diagnostic fragments must remain present, while volatile match counts may grow.
+Every diagnosed implementation family is mapped to a reusable metaprogramming
+strategy before backend-specific proofs are introduced.
