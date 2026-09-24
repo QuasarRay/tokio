@@ -218,10 +218,8 @@ mod tests {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let root = std::env::temp_dir().join(format!(
-            "tokio-metaverify-{}-{stamp}",
-            std::process::id()
-        ));
+        let root =
+            std::env::temp_dir().join(format!("tokio-metaverify-{}-{stamp}", std::process::id()));
         fs::create_dir_all(&root).unwrap();
         fs::write(root.join("source.rs"), "fn live_anchor() {}\n").unwrap();
         fs::write(
@@ -238,8 +236,12 @@ mod tests {
         .unwrap();
         let problems = validate_registry(&root, &registry);
 
-        assert!(problems.iter().any(|p| p.contains("duplicate obligation id")));
-        assert!(problems.iter().any(|p| p.contains("source anchor is stale")));
+        assert!(problems
+            .iter()
+            .any(|p| p.contains("duplicate obligation id")));
+        assert!(problems
+            .iter()
+            .any(|p| p.contains("source anchor is stale")));
         fs::remove_dir_all(root).unwrap();
     }
 }
