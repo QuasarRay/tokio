@@ -6,6 +6,15 @@
 
 pub mod registry;
 pub mod patterns;
+pub mod models;
+
+pub trait InvariantCheck {
+    fn invariant_ok(&self) -> bool;
+}
+
+pub trait ProofFamily {
+    const PROOF_FAMILY: &'static str;
+}
 
 /// Define an abstract state model and generate invariant boilerplate once.
 ///
@@ -44,6 +53,12 @@ macro_rules! invariant_model {
                     "verification invariant `{}` failed",
                     ::std::stringify!($inv)
                 );)+
+            }
+        }
+
+        impl $crate::InvariantCheck for $name {
+            fn invariant_ok(&self) -> bool {
+                self.is_valid()
             }
         }
     };

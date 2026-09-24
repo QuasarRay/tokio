@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["."]
+members = [".", "macros"]
 
 [package]
 name = "tokio-verification"
@@ -19,6 +19,7 @@ name = "tokio-proof-patterns"
 path = "src/bin/proof_patterns.rs"
 
 [dependencies]
+tokio-verification-macros = { path = "macros" }
 
 [lints.rust]
 unsafe_code = "forbid"

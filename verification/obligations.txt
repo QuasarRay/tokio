@@ -1,2 +1,4 @@
 # id|backend|assurance|source|anchor|harness|claim
 metaverifier-self-test|test|meta|verification/src/registry.rs|pub fn validate_registry|verification/src/registry.rs|The registry validator rejects duplicate obligation IDs and stale source anchors.
+linked-list-model-kani|kani|abstract-model|tokio/src/util/linked_list.rs|pub(crate) struct LinkedList|verification/src/models/intrusive_list.rs|Generated Kani harness proves bounded abstract intrusive-list transitions preserve structural invariants.
+task-state-model-kani|kani|abstract-model|tokio/src/runtime/task/state.rs|pub(super) struct State|verification/src/models/task_state.rs|Generated Kani harness proves bounded abstract task-state representation transitions preserve bit partition and encode/decode invariants.
