@@ -1,0 +1,5 @@
+# id|backend|assurance|source|anchor|harness|claim
+linked-list-model-kani|kani|abstract-model|tokio/src/util/linked_list.rs|pub(crate) struct LinkedList|verification/src/models/intrusive_list.rs|Bounded abstract intrusive-list push/pop/remove sequences preserve structural list invariants.
+linked-list-model-test|test|abstract-model|tokio/src/util/linked_list.rs|pub(crate) struct LinkedList|verification/src/models/intrusive_list.rs|Exhaustive short operation sequences cross-check the same generated invariants used by Kani.
+metaverifier-self-test|test|meta|verification/src/registry.rs|pub fn validate_registry|verification/src/registry.rs|The registry validator rejects duplicate obligation IDs and stale source anchors.
+verus-backend-smoke|verus|infrastructure|verification/src/lib.rs|macro_rules! invariant_model|verification/verus/smoke.rs|The Verus adapter can discharge a minimal precondition/postcondition proof before code-level Verus obligations are added.
