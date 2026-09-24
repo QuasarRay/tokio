@@ -58,6 +58,15 @@ build_mode() {
   export CARGO_TARGET_DIR="$target_dir"
   export CARGO_INCREMENTAL=0
 
+  # MSVC's linker can otherwise stamp proc-macro DLLs differently across
+  # two builds of identical sources. /Brepro asks link.exe to emit reproducible
+  # PE/COFF output; it is applied identically to the base and verification head.
+  if [[ "${OS:-}" == "Windows_NT" ]]; then
+    export RUSTFLAGS="${TOKIO_IDENTITY_RUSTFLAGS:--C link-arg=/Brepro}"
+  else
+    export RUSTFLAGS="${TOKIO_IDENTITY_RUSTFLAGS:-}"
+  fi
+
   case "$mode" in
     minimal)
       cargo build --release -p tokio
