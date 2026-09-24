@@ -6,7 +6,8 @@ manifest="$repo_root/verification/Cargo.toml"
 expected="$repo_root/verification/regression/kani-harnesses.expected"
 
 while IFS='|' read -r harness fragment; do
-  [[ -z "$harness" || "$harness" == #* ]] && continue
+  [[ -z "$harness" ]] && continue
+  [[ "$harness" == \#* ]] && continue
 
   echo "=== Kani regression: $harness ==="
   output="$(cargo kani --manifest-path "$manifest" --harness "$harness" 2>&1)"
