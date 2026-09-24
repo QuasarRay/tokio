@@ -5,7 +5,7 @@ generator=attribute+declarative
 status=covered
 PATTERN unsafe-send-sync
 PATTERN nonnull-provenance
-PATTERN unchecked-pinning
+PATTERN pin-address-stability
 PATTERN manual-drop
 PATTERN atomic-rmw-loop
 generator=declarative-state-machine
