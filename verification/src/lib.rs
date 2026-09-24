@@ -1,19 +1,15 @@
 #![forbid(unsafe_code)]
-//! Reusable verification support for Tokio.
+//! Reusable verification and metaverification primitives for Tokio.
 //!
-//! This crate intentionally stays dependency-free and separate from Tokio's
-//! production code. It provides small metaprogramming primitives for abstract
-//! state models plus a registry validator that keeps proof obligations tied to
-//! their source anchors and harnesses.
+//! This is a nested workspace on purpose: Tokio's production workspace and
+//! production dependency graph remain unchanged.
 
-pub mod models;
 pub mod registry;
 
-/// Define an abstract state model and generate invariant boilerplate.
+/// Define an abstract state model and generate invariant boilerplate once.
 ///
-/// The generated `invariant_results`, `is_valid`, and `assert_valid` methods are
-/// shared by ordinary tests and formal-verification harnesses so that the same
-/// invariant definitions are not duplicated across backends.
+/// Backends added by later stacked PRs reuse these generated methods rather
+/// than duplicating invariant definitions.
 #[macro_export]
 macro_rules! invariant_model {
     (
@@ -52,27 +48,11 @@ macro_rules! invariant_model {
     };
 }
 
-/// Embed a proof-obligation identifier in a harness without runtime cost.
-///
-/// `tokio-metaverify` also requires the matching `TOKIO_PROOF:` marker so it
-/// can validate non-Rust backends and harnesses without parsing Rust syntax.
+/// Embed a stable proof-obligation identifier in generated proof code.
 #[macro_export]
 macro_rules! proof_obligation {
     ($id:literal) => {
         const _: &str = $id;
-    };
-}
-
-/// Generate a Kani proof harness while leaving stable `rustc` builds untouched.
-#[macro_export]
-macro_rules! kani_harness {
-    ($id:literal, $name:ident, $body:block) => {
-        #[cfg(kani)]
-        #[kani::proof]
-        fn $name() {
-            $crate::proof_obligation!($id);
-            $body
-        }
     };
 }
 
