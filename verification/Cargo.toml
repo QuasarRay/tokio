@@ -12,5 +12,8 @@ path = "src/bin/metaverify.rs"
 
 [dependencies]
 
+[package.metadata.kani.flags]
+default-unwind = "12"
+
 [lints]
 workspace = true
