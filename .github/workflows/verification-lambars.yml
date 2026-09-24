@@ -1,0 +1,40 @@
+name: Verification Lambars Meta
+
+on:
+  push:
+    branches:
+      - "verification-lambars-*"
+      - "master"
+    paths:
+      - "verification/lambars-meta/**"
+      - "verification/src/patterns.rs"
+      - "verification/src/proof_families.rs"
+      - ".github/workflows/verification-lambars.yml"
+  pull_request:
+    paths:
+      - "verification/lambars-meta/**"
+      - "verification/src/patterns.rs"
+      - "verification/src/proof_families.rs"
+      - ".github/workflows/verification-lambars.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lambars-meta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.92.0"
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: verification/lambars-meta
+      - name: Test Lambars metageneration
+        run: cargo test --manifest-path verification/lambars-meta/Cargo.toml
+      - name: Metaverify proof plan
+        run: cargo run --manifest-path verification/lambars-meta/Cargo.toml -- check
+      - name: Render proof plan
+        run: cargo run --manifest-path verification/lambars-meta/Cargo.toml -- render

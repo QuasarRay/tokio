@@ -66,3 +66,13 @@ bash verification/scripts/run-kani-expected.sh
 
 The generated model proofs are explicitly registered as abstract-model
 assurance; they do not claim equivalence to Tokio's unsafe implementation.
+
+
+## Lambars metageneration
+
+The Lambars layer lives in its own `verification/lambars-meta` workspace
+because Lambars requires Rust 1.92. It consumes the shared pattern/proof-family
+registry and performs immutable proof-plan construction, functional
+transformation, aggregation, Writer-based diagnostic accumulation, pipeline
+composition, and lens-based metadata updates without entering Tokio's runtime
+dependency graph.
