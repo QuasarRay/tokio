@@ -1,0 +1,4 @@
+# harness|expected output fragment
+linked_list_sequence_preserves_invariant|SUCCESS
+task_state_sequence_preserves_invariant|SUCCESS
+waker_refcount_sequence_preserves_invariant|SUCCESS

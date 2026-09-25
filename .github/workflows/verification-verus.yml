@@ -1,0 +1,52 @@
+name: Verification Verus
+
+on:
+  push:
+    branches:
+      - "verification-verus-*"
+      - "master"
+    paths:
+      - "verification/verus/**"
+      - "verification/scripts/run-verus.sh"
+      - "verification/obligations.txt"
+      - ".github/workflows/verification-verus.yml"
+  pull_request:
+    paths:
+      - "verification/verus/**"
+      - "verification/scripts/run-verus.sh"
+      - "verification/obligations.txt"
+      - ".github/workflows/verification-verus.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  VERUS_TAG: "release/0.2026.09.20.aef82ed"
+  VERUS_ARCHIVE: "verus-0.2026.09.20.aef82ed-x86-linux.zip"
+  VERUS_SHA256: "7b870fa12bc589015c2fab60a8b3d9f07c7b1adb3444eb0fadffcbf7f0447b33"
+
+jobs:
+  verus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Verus Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.98.1"
+      - name: Download pinned Verus release
+        run: |
+          curl --fail --location --retry 3             --output "/tmp/$VERUS_ARCHIVE"             "https://github.com/verus-lang/verus/releases/download/$VERUS_TAG/$VERUS_ARCHIVE"
+          echo "$VERUS_SHA256  /tmp/$VERUS_ARCHIVE" | sha256sum --check -
+          unzip -q "/tmp/$VERUS_ARCHIVE" -d /tmp/verus
+      - name: Locate Verus binary
+        run: |
+          VERUS_BIN="$(find /tmp/verus -type f -name verus -perm -111 | head -n1)"
+          test -n "$VERUS_BIN"
+          echo "VERUS_BIN=$VERUS_BIN" >> "$GITHUB_ENV"
+      - name: Verify Verus obligations
+        run: bash verification/scripts/run-verus.sh
+      - name: Validate shared proof registry
+        run: |
+          cargo run --manifest-path verification/Cargo.toml             --bin tokio-metaverify -- check .

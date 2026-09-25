@@ -1,0 +1,19 @@
+# Kani-style expected-output fragments.
+# Counts are deliberately omitted: growth is allowed, disappearance is a regression.
+PATTERN unsafe-cell-protocol
+generator=attribute+declarative
+status=covered
+PATTERN unsafe-send-sync
+PATTERN nonnull-provenance
+PATTERN pin-address-stability
+PATTERN manual-drop
+PATTERN atomic-rmw-loop
+generator=declarative-state-machine
+PATTERN atomic-bitfield-state
+PATTERN intrusive-list
+PATTERN raw-waker-vtable
+PATTERN repr-c-layout
+PATTERN unsafe-vtable-functions
+PATTERN ptr-write
+PATTERN maybe-uninit
+PATTERN unsafe-op-scope

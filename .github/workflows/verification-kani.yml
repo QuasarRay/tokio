@@ -1,0 +1,52 @@
+name: Verification Kani
+
+on:
+  push:
+    branches:
+      - "verification-*"
+      - "formal-verification-*"
+      - "master"
+    paths:
+      - "verification/**"
+      - ".github/workflows/verification-kani.yml"
+  pull_request:
+    paths:
+      - "verification/**"
+      - ".github/workflows/verification-kani.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metaverification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: verification
+      - name: Test verification workspace
+        run: cargo test --manifest-path verification/Cargo.toml
+      - name: Validate source-pattern regressions
+        run: cargo run --manifest-path verification/Cargo.toml --bin tokio-proof-patterns -- regression .
+      - name: Validate proof registry
+        run: cargo run --manifest-path verification/Cargo.toml --bin tokio-metaverify -- check .
+
+  kani:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Kani and verify all harnesses
+        uses: model-checking/kani-github-action@v1
+        with:
+          working-directory: verification
+      - name: Kani expected-output regression suite
+        run: bash verification/scripts/run-kani-expected.sh

@@ -1,0 +1,19 @@
+[workspace]
+resolver = "3"
+members = ["."]
+
+[package]
+name = "tokio-verification-lambars-meta"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.92.0"
+publish = false
+license = "MIT"
+
+[dependencies]
+tokio-verification = { path = ".." }
+lambars = { git = "https://github.com/lihs-ie/lambars.git", rev = "7cd362e3995eb6e33f07101b604fd006e9551a8b", default-features = false, features = ["typeclass", "compose", "control", "persistent", "optics", "derive", "effect"] }
+lambars-derive = { git = "https://github.com/lihs-ie/lambars.git", rev = "7cd362e3995eb6e33f07101b604fd006e9551a8b", package = "lambars-derive" }
+
+[lints.rust]
+unsafe_code = "forbid"
